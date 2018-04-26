@@ -45,11 +45,23 @@ class MainViewController: UIViewController {
 		viewModel.updateData()
 		tableView.dataSource = nil
 	
-		viewModel.tweets.bind(to: self.tableView.rx.items(cellIdentifier: "cell")) { (row, tweet, cell) in
-			if let cellToUse = cell as? TableViewCell {
-				cellToUse.tweet = tweet
+		
+//		viewModel.tweets?.bind(to: tableView.rx.items(cellIdentifier: "cell"))
+//
+//		viewModel.tweets.bind(to: tableView.rx.items(cellIdentifier: "cell")) { (row, tweet, cell) in
+//			if let cellToUse = cell as? TableViewCell {
+//				cellToUse.tweet = tweet
+//			}
+//		}.addDisposableTo(disposeBag)
+		
+		viewModel.tweets
+			.bind(to: tableView.rx.items(cellIdentifier: "cell",
+										 cellType: UITableViewCell.self)) {  row, element, cell in
+					if let cellToUse = cell as? TableViewCell {
+						cellToUse.tweet = tweet
+					}
 			}
-		}.addDisposableTo(disposeBag)
+			.addDisposableTo(disposeBag)
 		bindDataForSearchTextFieldAndButton()
 	}
 
